@@ -16,7 +16,6 @@ frame.pack(padx=50, pady=50)
 library_label = tk.Label(frame, text="Library")
 library_label.grid(row=0, column=0, columnspan=2, pady=(0, 10))
 
- 
 username_label = tk.Label(frame, text="Username:")
 username_label.grid(row=1, column=0, sticky=tk.E, pady=5)
 username_entry = tk.Entry(frame)
