@@ -1,5 +1,5 @@
 import tkinter as tk
-import mainform  # Import the mainform module
+import mainform  
 
 def on_login():
     username = username_entry.get()
@@ -7,10 +7,10 @@ def on_login():
     print(f"Username: {username}")
     print(f"Email: {email}")
     
-    # Destroy the login window
+   
     root.destroy()
     
-    # Open the main form
+    
     mainform.open_main_form()  # Call the function to open the main form
 
 root = tk.Tk()
