@@ -50,4 +50,5 @@ update_button.grid(row=4, column=1, pady=10)
 delete_button = tk.Button(frame, text="Delete", command=delete_record)
 delete_button.grid(row=4, column=2, pady=10)
 
+
 root.mainloop()
