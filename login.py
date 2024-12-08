@@ -6,11 +6,7 @@ def on_login():
     email = email_entry.get()
     print(f"Username: {username}")
     print(f"Email: {email}")
-    
-   
     root.destroy()
-    
-    
     mainform.open_main_form()  # Call the function to open the main form
 
 root = tk.Tk()
