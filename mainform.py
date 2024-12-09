@@ -180,24 +180,38 @@ def on_login():
     else:
         messagebox.showerror("Input Error", "Both fields are required!")
 
-# Login Window
+# Create main window
 login_root = tk.Tk()
 login_root.title("Log In")
+login_root.geometry("400x400")  # Set window size
 
-frame = tk.Frame(login_root, padx=50, pady=50, borderwidth=5)
-frame.pack(padx=50, pady=50)
+# Main frame with border
+main_frame = tk.Frame(login_root, bg="#f0f0f0", relief=tk.RIDGE, borderwidth=5)
+main_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER, width=300, height=300)
 
-username_label = tk.Label(frame, text="Username:")
-username_label.grid(row=1, column=0, sticky=tk.E, pady=5)
-username_entry = tk.Entry(frame)
-username_entry.grid(row=1, column=1, pady=5)
+# Welcome label
+welcome_label = tk.Label(main_frame, text="Admin", font=("Arial", 16, "bold"), bg="#f0f0f0")
+welcome_label.pack(pady=(20, 10))
 
-email_label = tk.Label(frame, text="Email:")
-email_label.grid(row=2, column=0, sticky=tk.E, pady=5)
-email_entry = tk.Entry(frame)
-email_entry.grid(row=2, column=1, pady=5)
+# Login frame for inputs
+frame = tk.Frame(main_frame, padx=10, pady=10, bg="#f0f0f0")
+frame.pack(pady=10)
 
-login_button = tk.Button(frame, text="Log In", command=on_login)
-login_button.grid(row=3, column=0, columnspan=2, pady=(10, 0))
+# Username label and entry
+username_label = tk.Label(frame, text="Username:", font=("Arial", 12), bg="#f0f0f0")
+username_label.grid(row=0, column=0, sticky=tk.E, pady=5, padx=5)
+username_entry = tk.Entry(frame, width=25)
+username_entry.grid(row=0, column=1, pady=5)
 
+# Email label and entry
+email_label = tk.Label(frame, text="Email:", font=("Arial", 12), bg="#f0f0f0")
+email_label.grid(row=1, column=0, sticky=tk.E, pady=5, padx=5)
+email_entry = tk.Entry(frame, width=25)
+email_entry.grid(row=1, column=1, pady=5)
+
+# Login button
+login_button = tk.Button(main_frame, text="Log In", command=on_login, bg="#4CAF50", fg="white", font=("Arial", 12, "bold"))
+login_button.pack(pady=20)
+
+# Run main loop
 login_root.mainloop()
