@@ -1,13 +1,34 @@
 import tkinter as tk
 import mainform
+import mysql.connector
 
 def on_login():
     username = username_entry.get()
     email = email_entry.get()
+
+    # Connect to the database
+    connection = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='',
+        database='your_database_name'
+    )
+    cursor = connection.cursor()
+
+    # Insert user data into the database
+    add_user = ("INSERT INTO users (username, email) VALUES (%s, %s)")
+    user_data = (username, email)
+    cursor.execute(add_user, user_data)
+    connection.commit()
+
+    # Close the connection
+    cursor.close()
+    connection.close()
+
     print(f"Username: {username}")
     print(f"Email: {email}")
     root.destroy()
-    mainform.open_main_form()  # Call the function to open the main form
+    mainform.open_main_form()
 
 if __name__ == "__main__":
     # Main Window
