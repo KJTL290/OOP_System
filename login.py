@@ -1,40 +1,34 @@
 from tkinter import *
 from tkinter import messagebox
 import mysql.connector
-import mainform  # Import the mainform module
 from datetime import datetime
 
 def login_form():
-    # Create the main window for the login form
+    # Initialize the login form window
     root = Tk()
     root.title("Login Form")
     root.geometry("400x300")
 
-    # Create a frame to act as a box for the login form
-    box_frame = Frame(root, bd=2, relief="solid", padx=20, pady=20)
-    box_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+    # Create a container frame for the login form
+    form_frame = Frame(root, bd=2, relief="solid", padx=20, pady=20)
+    form_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-    # Create a label for the login form title
-    title_label = Label(box_frame, text="Log In", font=("Arial", 16))
-    title_label.pack(pady=10)
+    # Add a title label to the form
+    Label(form_frame, text="Log In", font=("Arial", 16)).pack(pady=10)
 
-    # Create a frame to hold the username and password fields
-    frame = Frame(box_frame)
-    frame.pack(pady=20)
+    # Input fields for username and password
+    input_frame = Frame(form_frame)
+    input_frame.pack(pady=20)
 
-    # Create a label and entry for the username
-    username_label = Label(frame, text="Username:", font=("Arial", 12))
-    username_label.grid(row=0, column=0, padx=10, pady=5, sticky=E)
-    username_entry = Entry(frame, width=30, font=("Arial", 12))
+    Label(input_frame, text="Username:", font=("Arial", 12)).grid(row=0, column=0, padx=10, pady=5, sticky=E)
+    username_entry = Entry(input_frame, width=30, font=("Arial", 12))
     username_entry.grid(row=0, column=1, pady=5)
 
-    # Create a label and entry for the password
-    password_label = Label(frame, text="Password:", font=("Arial", 12))
-    password_label.grid(row=1, column=0, padx=10, pady=5, sticky=E)
-    password_entry = Entry(frame, width=30, font=("Arial", 12), show='*')
+    Label(input_frame, text="Password:", font=("Arial", 12)).grid(row=1, column=0, padx=10, pady=5, sticky=E)
+    password_entry = Entry(input_frame, width=30, font=("Arial", 12))
     password_entry.grid(row=1, column=1, pady=5)
 
-    # Function to handle login button click
+    # Login function to validate credentials and log attempts
     def login():
         username = username_entry.get()
         password = password_entry.get()
@@ -43,49 +37,40 @@ def login_form():
         try:
             conn = mysql.connector.connect(
                 host="localhost",
-                user="root",  # Default username
-                password="",  # Default password (leave empty if not set)
-                database="login"  # Database name
+                user="root",  # Default MySQL username
+                password="",  # Default MySQL password (leave blank if not set)
+                database="login"
             )
             cursor = conn.cursor()
         except mysql.connector.Error as err:
             messagebox.showerror("Database Error", f"Error: {err}")
-            print(f"Error: {err}")  # Print error to the console for debugging
-            return  # Exit the function if connection fails
+            return  # Stop execution if connection fails
 
-        # Get current timestamp
+        # Record the current timestamp
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        # Check credentials
-        if username == "admin" and password == "password":  # Replace with actual credentials
-            status = "Success"
-            messagebox.showinfo("Login Successful", "Welcome Admin")
-            root.destroy()  # Close the login window
-            mainform.open_main_form()  # Call the function to open the main form
-        else:
-            status = "Failed"
-            messagebox.showwarning("Login Failed", "Invalid username or password")
+        # Check username and password (this example always logs the attempt)
+        status = "Success" if username == "admin" and password == "1234" else "Failed"
+        message = "Login Successful" if status == "Success" else "Login Failed"
+        messagebox.showinfo("Login Result", message)
 
-        # Insert login attempt into the database
+        # Log the login attempt
         try:
             cursor.execute(
-                "INSERT INTO login_attempts (username, timestamp, status) VALUES (%s, %s, %s)",
-                (username, timestamp, status)
+                "INSERT INTO login_attempts (username, timestamp, status, typed_password) VALUES (%s, %s, %s, %s)",
+                (username, timestamp, status, password)
             )
             conn.commit()
         except mysql.connector.Error as err:
             messagebox.showerror("Database Error", f"Failed to log attempt: {err}")
-            print(f"Failed to log attempt: {err}")
         finally:
             cursor.close()
-            conn.close()  # Always close the connection
+            conn.close()  # Ensure the connection is closed
 
-    # Create a login button
-    login_button = Button(box_frame, text="Login", font=("Arial", 12), command=login)
-    login_button.pack(pady=20)
+    # Add a login button
+    Button(form_frame, text="Login", font=("Arial", 12), command=login).pack(pady=20)
 
-    # Run the main loop
-    root.mainloop()
+    root.mainloop()  # Start the Tkinter main loop
 
 if __name__ == "__main__":
     login_form()
