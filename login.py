@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import mysql.connector
 from datetime import datetime
+from mainform import open_main_form  # Import the main form function
 
 def login_form():
     # Initialize the login form window
@@ -14,7 +15,7 @@ def login_form():
     form_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
     # Add a title label to the form
-    Label(form_frame, text="Log In", font=("Arial", 16)).pack(pady=10)
+    Label(form_frame, text="Log In", font=("Arial", 25)).pack(pady=10)
 
     # Input fields for username and password
     input_frame = Frame(form_frame)
@@ -25,8 +26,11 @@ def login_form():
     username_entry.grid(row=0, column=1, pady=5)
 
     Label(input_frame, text="Password:", font=("Arial", 12)).grid(row=1, column=0, padx=10, pady=5, sticky=E)
-    password_entry = Entry(input_frame, width=30, font=("Arial", 12))
+    password_entry = Entry(input_frame, width=30, font=("Arial", 12), show="#")
     password_entry.grid(row=1, column=1, pady=5)
+
+    if username_entry == " " and password_entry == " ":
+        messagebox.showerror("Please Fill Up The Log In Form")
 
     # Login function to validate credentials and log attempts
     def login():
@@ -52,7 +56,6 @@ def login_form():
         # Check username and password (this example always logs the attempt)
         status = "Success" if username == "kim" and password == "12345" else "Failed"
         message = "Login Successful" if status == "Success" else "Login Failed"
-        messagebox.showinfo("Login Result", message)
 
         # Log the login attempt
         try:
@@ -67,10 +70,17 @@ def login_form():
             cursor.close()
             conn.close()  # Ensure the connection is closed
 
+        # Show a message and open the main form if login is successful
+        if status == "Success":
+            messagebox.showinfo("Login Result", message)
+            root.destroy()  # Close the login form
+            open_main_form()  # Open the main form from the imported module
+        else:
+            messagebox.showerror("Login Result", message)
+
     # Add a login button
     Button(form_frame, text="Login", font=("Arial", 12), command=login).pack(pady=20)
 
     root.mainloop()  # Start the Tkinter main loop
 
-if __name__ == "__main__":
-    login_form()
+login_form()
