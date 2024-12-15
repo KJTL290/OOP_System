@@ -39,24 +39,35 @@ def open_main_form():
     type_of_product = Entry(frame, width=30, font=("Arial", 12))
     type_of_product.grid(row=2, column=1, pady=5)
 
+    Label(frame, text="Number of Stacks:", font=("Arial", 12), bg="#f5f5f5").grid(row=3, column=0, sticky=E, pady=5)
+    number_of_stacks = Entry(frame, width=30, font=("Arial", 12))
+    number_of_stacks.grid(row=3, column=1, pady=5)
+
     # Button actions
     def add_record():
         name = name_of_farmer.get()
         address = address_of_farmer.get()
         product_type = type_of_product.get()
+        stacks = number_of_stacks.get()
 
-        if not name or not address or not product_type:
+        if not name or not address or not product_type or not stacks:
             messagebox.showwarning("Input Error", "All fields must be filled out!")
+            return
+
+        try:
+            stacks = int(stacks)
+        except ValueError:
+            messagebox.showwarning("Input Error", "Number of stacks must be a valid number!")
             return
 
         stack_number = get_next_stack_number()
         added_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         cursor.execute(
-            "INSERT INTO farm_stack (stack_number, name, address, product_type, added_time) VALUES (%s, %s, %s, %s, %s)",
-            (stack_number, name, address, product_type, added_time)
+            "INSERT INTO farm_stack (stack_number, name, address, product_type, number_of_stacks, added_time) VALUES (%s, %s, %s, %s, %s, %s)",
+            (stack_number, name, address, product_type, stacks, added_time)
         )
         db_connection.commit()
-        stack_table.insert("", END, values=(stack_number, name, address, product_type, added_time))
+        stack_table.insert("", END, values=(stack_number, name, address, product_type, stacks, added_time))
         clear_entries()
         messagebox.showinfo("Success", "Record added successfully!")
 
@@ -75,13 +86,20 @@ def open_main_form():
         name = name_of_farmer.get() or current_values[1]
         address = address_of_farmer.get() or current_values[2]
         product_type = type_of_product.get() or current_values[3]
+        stacks = number_of_stacks.get() or current_values[4]
+
+        try:
+            stacks = int(stacks)
+        except ValueError:
+            messagebox.showwarning("Input Error", "Number of stacks must be a valid number!")
+            return
 
         cursor.execute(
-            "UPDATE farm_stack SET name=%s, address=%s, product_type=%s WHERE stack_number=%s",
-            (name, address, product_type, current_values[0])
+            "UPDATE farm_stack SET name=%s, address=%s, product_type=%s, number_of_stacks=%s WHERE stack_number=%s",
+            (name, address, product_type, stacks, current_values[0])
         )
         db_connection.commit()
-        stack_table.item(selected_item, values=(current_values[0], name, address, product_type, current_values[4]))
+        stack_table.item(selected_item, values=(current_values[0], name, address, product_type, stacks, current_values[5]))
         clear_entries()
         messagebox.showinfo("Success", "Record updated successfully!")
 
@@ -98,12 +116,12 @@ def open_main_form():
         messagebox.showinfo("Success", "Record deleted successfully!")
 
     def clear_entries():
-        for entry in [name_of_farmer, address_of_farmer, type_of_product]:
+        for entry in [name_of_farmer, address_of_farmer, type_of_product, number_of_stacks]:
             entry.delete(0, END)
 
     # Buttons
     button_frame = Frame(frame, bg="#f5f5f5")
-    button_frame.grid(row=3, column=0, columnspan=2, pady=15)
+    button_frame.grid(row=4, column=0, columnspan=2, pady=15)
 
     Button(button_frame, text="Add", font=("Arial", 12, "bold"), bg="#4CAF50", fg="white", command=add_record).pack(side=LEFT, padx=5)
     Button(button_frame, text="Update", font=("Arial", 12, "bold"), bg="#2196F3", fg="white", command=update_record).pack(side=LEFT, padx=5)
@@ -113,17 +131,19 @@ def open_main_form():
     table_frame = Frame(root, bg="#f5f5f5")
     table_frame.pack(fill=BOTH, expand=True, padx=20, pady=10)
 
-    columns = ("Stack Number", "Name of Farmer", "Address", "Type of Product", "Added Time")
+    columns = ("Stack Number", "Name of Farmer", "Address", "Type of Product", "Number of Stacks", "Added Time")
     stack_table = ttk.Treeview(table_frame, columns=columns, show="headings", height=15)
     stack_table.heading("Stack Number", text="No#")
     stack_table.heading("Name of Farmer", text="Name of Farmer")
     stack_table.heading("Address", text="Address")
     stack_table.heading("Type of Product", text="Type of Product")
+    stack_table.heading("Number of Stacks", text="Number of Stacks")
     stack_table.heading("Added Time", text="Added Time")
     stack_table.column("Stack Number", width=50, anchor=CENTER)
     stack_table.column("Name of Farmer", width=200, anchor=CENTER)
     stack_table.column("Address", width=150, anchor=CENTER)
     stack_table.column("Type of Product", width=150, anchor=CENTER)
+    stack_table.column("Number of Stacks", width=120, anchor=CENTER)
     stack_table.column("Added Time", width=150, anchor=CENTER)
     stack_table.pack(side=LEFT, fill=BOTH, expand=True)
 
@@ -141,5 +161,3 @@ def open_main_form():
 
     populate_table()
     root.mainloop()
-
-open_main_form()

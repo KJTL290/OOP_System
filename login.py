@@ -29,8 +29,7 @@ def login_form():
     password_entry = Entry(input_frame, width=30, font=("Arial", 12), show="#")
     password_entry.grid(row=1, column=1, pady=5)
 
-    if username_entry == " " and password_entry == " ":
-        messagebox.showerror("Please Fill Up The Log In Form")
+    
 
     # Login function to validate credentials and log attempts
     def login():
