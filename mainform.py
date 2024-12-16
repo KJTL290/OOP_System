@@ -19,27 +19,27 @@ def open_main_form():
     root.geometry("800x600")
 
     # Header
-    header = Label(root, text="Rice and Corn Stack Management System", font=("Helvetica", 18, "bold"), bg="#4CAF50", fg="white", pady=10)
+    header = Label(root, text="Rice and Corn Stack Management System", font=("Helvetica", 18, "bold"), bg="green", fg="white", pady=10)
     header.pack(fill=X)
 
     # Frame for form inputs
-    frame = Frame(root, bg="#f5f5f5", padx=20, pady=20)
+    frame = Frame(root, bg="light grey", padx=20, pady=20)
     frame.pack(fill=X)
 
     # Input fields
-    Label(frame, text="Name of the Farmer:", font=("Arial", 12), bg="#f5f5f5").grid(row=0, column=0, sticky=E, pady=5)
+    Label(frame, text="Name of the Farmer:", font=("Arial", 12), bg="light grey").grid(row=0, column=0, sticky=E, pady=5)
     name_of_farmer = Entry(frame, width=30, font=("Arial", 12))
     name_of_farmer.grid(row=0, column=1, pady=5)
 
-    Label(frame, text="Address of the Farmer:", font=("Arial", 12), bg="#f5f5f5").grid(row=1, column=0, sticky=E, pady=5)
+    Label(frame, text="Address of the Farmer:", font=("Arial", 12), bg="light grey").grid(row=1, column=0, sticky=E, pady=5)
     address_of_farmer = Entry(frame, width=30, font=("Arial", 12))
     address_of_farmer.grid(row=1, column=1, pady=5)
 
-    Label(frame, text="Type of Product (Rice/Corn):", font=("Arial", 12), bg="#f5f5f5").grid(row=2, column=0, sticky=E, pady=5)
+    Label(frame, text="Type of Product (Rice/Corn):", font=("Arial", 12), bg="light grey").grid(row=2, column=0, sticky=E, pady=5)
     type_of_product = Entry(frame, width=30, font=("Arial", 12))
     type_of_product.grid(row=2, column=1, pady=5)
 
-    Label(frame, text="Number of Stacks:", font=("Arial", 12), bg="#f5f5f5").grid(row=3, column=0, sticky=E, pady=5)
+    Label(frame, text="Number of Stacks:", font=("Arial", 12), bg="light grey").grid(row=3, column=0, sticky=E, pady=5)
     number_of_stacks = Entry(frame, width=30, font=("Arial", 12))
     number_of_stacks.grid(row=3, column=1, pady=5)
 
@@ -120,15 +120,15 @@ def open_main_form():
             entry.delete(0, END)
 
     # Buttons
-    button_frame = Frame(frame, bg="#f5f5f5")
+    button_frame = Frame(frame, bg="light grey")
     button_frame.grid(row=4, column=0, columnspan=2, pady=15)
 
-    Button(button_frame, text="Add", font=("Arial", 12, "bold"), bg="#4CAF50", fg="white", command=add_record).pack(side=LEFT, padx=5)
-    Button(button_frame, text="Update", font=("Arial", 12, "bold"), bg="#2196F3", fg="white", command=update_record).pack(side=LEFT, padx=5)
-    Button(button_frame, text="Delete", font=("Arial", 12, "bold"), bg="#F44336", fg="white", command=delete_record).pack(side=LEFT, padx=5)
+    Button(button_frame, text="Add", font=("Arial", 12, "bold"), bg="green", fg="white", command=add_record).pack(side=LEFT, padx=5)
+    Button(button_frame, text="Update", font=("Arial", 12, "bold"), bg="blue", fg="white", command=update_record).pack(side=LEFT, padx=5)
+    Button(button_frame, text="Delete", font=("Arial", 12, "bold"), bg="red", fg="white", command=delete_record).pack(side=LEFT, padx=5)
 
     # Table for displaying records
-    table_frame = Frame(root, bg="#f5f5f5")
+    table_frame = Frame(root, bg="light grey")
     table_frame.pack(fill=BOTH, expand=True, padx=20, pady=10)
 
     columns = ("Stack Number", "Name of Farmer", "Address", "Type of Product", "Number of Stacks", "Added Time")
