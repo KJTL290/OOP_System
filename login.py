@@ -43,7 +43,7 @@ def login_form():
 
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        status = "Success" if username == "kim" and password == "12345" else "Failed"
+        status = "Success" if username == "admin" and password == "12345" else "Failed"
         message = "Login Successful" if status == "Success" else "Login Failed"
 
         try:
