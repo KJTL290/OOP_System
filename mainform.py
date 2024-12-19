@@ -42,32 +42,32 @@ def open_main_form():
     product_type_entry.grid(row=2, column=1, pady=5)
 
     harvest_label = Label(input_frame, text="Number of Harvest:", font=("Arial", 12), bg="light grey").grid(row=3, column=0, sticky=E, pady=5)
-    sacks_entry = Entry(input_frame, width=30, font=("Arial", 12))
-    sacks_entry.grid(row=3, column=1, pady=5)
+    harvest_entry = Entry(input_frame, width=30, font=("Arial", 12))
+    harvest_entry.grid(row=3, column=1, pady=5)
 
     def add_record():
         season = type_of_season_entry.get()
         location = location_entry.get()
         product_type = product_type_entry.get()
-        sacks = sacks_entry.get()
+        harvest = harvest_entry.get()
 
-        if not season or not location or not product_type or not sacks:
+        if not season or not location or not product_type or not harvest:
             messagebox.showwarning("Input Error", "All fields must be filled out!")
             return
 
         try:
-            sacks = int(sacks)
+            harvest = int(harvest)
         except ValueError:
-            messagebox.showwarning("Input Error", "Number of sacks must be a valid number!")
+            messagebox.showwarning("Input Error", "Number of harvest must be a valid number!")
             return
 
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         cursor.execute(
             """
-            INSERT INTO farm_stack (Type_of_Season, Located, Type_of_Product, Number_of_Sacks, Time_Added)
+            INSERT INTO farm_stack (Type_of_Season, Located, Type_of_Product, Number_of_Harvest, Time_Added)
             VALUES (%s, %s, %s, %s, %s)
             """,
-            (season, location, product_type, sacks, timestamp)
+            (season, location, product_type, harvest, timestamp)
         )
         db_connection.commit()
         populate_table()
@@ -84,7 +84,7 @@ def open_main_form():
         season = type_of_season_entry.get()
         location = location_entry.get()
         product_type = product_type_entry.get()
-        sacks = sacks_entry.get()
+        harvest = harvest_entry.get()
 
         updates = {}
 
@@ -94,11 +94,11 @@ def open_main_form():
             updates['Located'] = location
         if product_type:
             updates['Type_of_Product'] = product_type
-        if sacks:
+        if harvest:
             try:
-                updates['Number_of_Sacks'] = int(sacks)
+                updates['Number_of_Harvest'] = int(harvest)
             except ValueError:
-                messagebox.showwarning("Input Error", "Number of sacks must be a valid number!")
+                messagebox.showwarning("Input Error", "Number of harvest must be a valid number!")
                 return
 
         if not updates:
@@ -129,7 +129,7 @@ def open_main_form():
         messagebox.showinfo("Success", "Record deleted successfully!")
 
     def clear_inputs():
-        for entry in [type_of_season_entry, location_entry, product_type_entry, sacks_entry]:
+        for entry in [type_of_season_entry, location_entry, product_type_entry, harvest_entry]:
             entry.delete(0, END)
 
     button_frame = Frame(input_frame, bg="light grey")
@@ -142,7 +142,7 @@ def open_main_form():
     table_frame = Frame(root, bg="light grey")
     table_frame.pack(fill=BOTH, expand=True, padx=20, pady=10)
 
-    columns = ("Id#", "Type of Season", "Located", "Type of Product", "Number of Sacks", "Time Added")
+    columns = ("Id#", "Type of Season", "Located", "Type of Product", "Number of Harvest", "Time Added")
     stack_table = ttk.Treeview(table_frame, columns=columns, show="headings", height=15)
     for col in columns:
         stack_table.heading(col, text=col)
